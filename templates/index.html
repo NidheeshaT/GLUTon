@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+    <script src="/static/script.js"></script>
+</head>
+<body>
+    <div id="container1" style="width: 100vw;height: 100px; ">
+
+    </div>
+    <div id="container" style="width: 100vw;height: 300px;">
+
+    </div>
+    <div id="container2" style="width: 100vw;height: 100px;">
+
+    </div>
+    <script>
+        require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            let editor = monaco.editor.create(document.getElementById('container'), {
+                value: `int a=0;
+                int b=0;`,
+                language: "cpp",
+                theme: "vs-dark", // Set the VS Code dark theme
+                lineNumbers:(l)=>""+(l+5)
+            });
+            let editor1 = monaco.editor.create(document.getElementById('container1'), {
+                value: "#include<iostream>\n#include<GL/glut.h>\n\nvoid display()\n{",
+                language: "cpp",
+                theme: "vs-dark", // Set the VS Code dark theme
+                readOnly:true,
+                lineNumbers:(l)=>""
+            });
+            let editor2 = monaco.editor.create(document.getElementById('container2'), {
+                value: "}\nint main(){\nreturn 0;\n}",
+                language: "cpp",
+                theme: "vs-dark", // Set the VS Code dark theme
+                readOnly:true,
+                lineNumbers:(l)=>""
+            });
+
+            monaco.languages.register({ id: 'cpp' });
+            let arr=glutKeywords.map(element => {
+return { label: element, kind: monaco.languages.CompletionItemKind.Keyword, insertText: element}})
+console.log(arr)
+            
+            monaco.languages.registerCompletionItemProvider('cpp', {
+    provideCompletionItems: function(model, position) {
+     
+      return {
+        suggestions: [
+          { label: 'cout', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'cout' },
+          { label: 'cin', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'cin' },
+          ...arr
+        ]
+      };
+    }
+  });
+  editor.onKeyUp(()=>{
+      console.log(editor.getValue())
+  })
+});
+
+
+
+    </script>
+</body>
+</html>

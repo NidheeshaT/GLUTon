@@ -9,6 +9,7 @@ Welcome to GLUTon, the online compiler for GLUT programming enthusiasts! GLUTon 
 - [x] (15:30:52 7 July 2023 Friday) Create C++ program main.cpp ti generate a image of the output
 - [x] (19:50:53 7 July 2023 Friday) Configure a different file to insert the function sent as file/code by user
 - [x] (20:12:01 7 July 2023 Friday) Test the api
+23:05:50 7 July 2023 Friday (night time)
 - [ ] Create a frontend for the send the requests
 - [ ] Maintain queue to accept the request one at a time
 - [ ] Send appropriate responses back to the user
