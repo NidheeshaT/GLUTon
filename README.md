@@ -4,7 +4,7 @@ Welcome to GLUTon, the online compiler for GLUT programming enthusiasts! GLUTon 
 
 ## Lists of jobs to do
 - [x] (14:56:46 7 July 2023 Friday) Write a to do list
-- [ ] Flask basic setup
+- [x] (14:59:29 7 July 2023 Friday) Flask basic setup
 - [ ] Flask accept a file/code
 - [ ] Create C++ program main.cpp ti generate a image of the output
 - [ ] Configure a different file to insert the function sent as file/code by user
