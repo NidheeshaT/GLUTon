@@ -12,7 +12,10 @@ app.debug=(not eval(os.getenv("PRODUCTION",False)))
 @app.post("/")
 def get_data():
     try:
-        code=request.json["code"]
+        code=str(request.json.get("code"))
+        if not code:
+            return make_response("No code provided",400)
+        
 
         with open("display.cpp","w") as f:
             f.write('#include "display.h"\n')
@@ -25,19 +28,19 @@ def get_data():
         if(result.returncode==0):
             result=run("main")
             response=send_file("output.png",mimetype="image/png")
-
-            return response
         else:
             errorMessage=result.stderr
             if errorMessage.split("\n")[0].find("CodeSnippet::display()")!=-1:
                 errorMessage=errorMessage[errorMessage.find("\n")+1:]
             errorMessage=errorMessage.replace("display.cpp","display")
+
             response=make_response(errorMessage)
             response.status_code=400
             response.content_type="text/plain"
-            return response
-    except KeyError:
-        return "fail"
+
+        return response
+    except:
+        return make_response("Server error",500)
 
 @app.get("/")
 def index():
