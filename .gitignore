@@ -7,3 +7,5 @@ lib/
 freeglut.dll
 FreeImage.dll
 *.exe
+.vscode/
+output.png

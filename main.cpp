@@ -1,7 +1,7 @@
 #include <iostream>
-#include <fstream>
 #include <GL/glut.h>
 #include <FreeImage.h>
+#include "display.h"
 
 void saveTextureToFile(GLuint textureID, int width, int height, const std::string& filename)
 {
@@ -26,20 +26,9 @@ void saveTextureToFile(GLuint textureID, int width, int height, const std::strin
 
 void display()
 {
-    // Your GLUT drawing code here
-    // ...
 
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_POLYGON);
-    glColor3f(0.0, 1.0, 1.0);
-    glVertex2f(0.0, 0.0);
-    glVertex2f(0.0, 1.0);
-    glVertex2f(1.0, 0.0);
-    glEnd();
-    // glFlush();
+   CodeSnippet::display();
 
-    // Save the GLUT drawings to an image file
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
     GLuint textureID = 0;
@@ -48,12 +37,10 @@ void display()
     glBindTexture(GL_TEXTURE_2D, textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, windowWidth, windowHeight);
-    saveTextureToFile(textureID, windowWidth, windowHeight, "glut_output.png");
+    saveTextureToFile(textureID, windowWidth, windowHeight, "output.png");
 
-    // Cleanup
     glDeleteTextures(1, &textureID);
 
-    // Exit the program after saving the GLUT drawings
     exit(0);
 }
 
