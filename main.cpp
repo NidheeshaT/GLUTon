@@ -43,7 +43,6 @@ void display()
 
     exit(0);
 }
-
 int main(int argc, char** argv)
 {
     // Initialize GLUT

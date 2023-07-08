@@ -13,7 +13,7 @@ Welcome to GLUTon, the online compiler for GLUT programming enthusiasts! GLUTon 
   23:05:50 7 July 2023 Friday (night time)
 
   09:27:06 8 July 2023 Saturday (work time starts)
-- [ ] Create a frontend for the send the requests
+- [x] (22:08:11 8 July 2023 Saturday) Create a frontend for the send the requests
 - [ ] Maintain queue to accept the request one at a time
 - [ ] Send appropriate responses back to the user
 - [ ] Select a Cloud Platform to deploy the app

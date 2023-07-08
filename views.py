@@ -11,6 +11,7 @@ app.debug=(not eval(os.getenv("PRODUCTION",False)))
 
 @app.post("/")
 def get_data():
+    print(request.form)
     try:
         code=str(request.json.get("code"))
         if not code:
@@ -18,8 +19,8 @@ def get_data():
         
 
         with open("display.cpp","w") as f:
-            f.write('#include "display.h"\n')
-            f.write('void CodeSnippet::display(){\n')
+            f.write('#include "display.h"\n\n\n')
+            f.write('void CodeSnippet::display()\n{\n')
             f.write(code)
             f.write('\n}')
         command="g++ -I./include -L./lib *.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o main"

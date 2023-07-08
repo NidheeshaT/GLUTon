@@ -1,4 +1,8 @@
 #include "display.h"
-void CodeSnippet::display(){
-2.2
+
+
+void CodeSnippet::display()
+{
+	//Write your code here
+	s;}
 }
