@@ -57,6 +57,10 @@ def get_data():
         result=run(command,timeout=5)
         if result.returncode==0:
             codes[hashCode]=True
+            command="ls -l"
+            command=command.split()
+            result=run(command,capture_output=True,text=True)
+            print(result.stdout,result.stderr)
             return send_file(f"media/{hashCode}.png",mimetype="image/png")
         else:
             return make_response("Server error",500)
