@@ -46,11 +46,11 @@ def get_data():
         f.write(code)
         f.write('\n}')
     # command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
-    command=f"g++ main.cpp {hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o {hashCode}"
+    command=f"g++ /app/main.cpp /app/{hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o /app/{hashCode}"
     result=run(command,capture_output=True,text=True)
 
     if(result.returncode==0):
-        result=run(f"{hashCode} {hashCode}",timeout=5)
+        result=run(f"/app/{hashCode} {hashCode}",timeout=5)
         if result.returncode==0:
             codes[hashCode]=True
             return send_file(f"media/{hashCode}.png",mimetype="image/png")
@@ -72,11 +72,11 @@ def get_data():
     # finally:
     if hashCode:
         try:
-            os.remove(f"{hashCode}.cpp")
+            os.remove(f"/app/{hashCode}.cpp")
         except:
             pass
         try:
-            os.remove(f"{hashCode}.out")
+            os.remove(f"/app/{hashCode}.out")
         except:
             pass
 
