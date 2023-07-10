@@ -29,56 +29,56 @@ def clean_code(code:str):
 
 @app.post("/")
 def get_data():
-    try:
-        code=str(request.json.get("code"))
-        hashCode=str(request.json.get("hash"))
+    # try:
+    code=str(request.json.get("code"))
+    hashCode=str(request.json.get("hash"))
 
-        if not code or not hashCode:
-            return make_response("Invalid request",400)
+    if not code or not hashCode:
+        return make_response("Invalid request",400)
 
-        if hashCode in codes:
+    if hashCode in codes:
+        return send_file(f"media/{hashCode}.png",mimetype="image/png")
+
+
+    with open(f"{hashCode}.cpp","w") as f:
+        f.write('#include "display.h"\n\n\n')
+        f.write('void CodeSnippet::display()\n{\n')
+        f.write(code)
+        f.write('\n}')
+    # command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
+    command=f"g++ main.cpp {hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o {hashCode}"
+    result=run(command,capture_output=True,text=True)
+
+    if(result.returncode==0):
+        result=run(f"{hashCode} {hashCode}",timeout=5)
+        if result.returncode==0:
+            codes[hashCode]=True
             return send_file(f"media/{hashCode}.png",mimetype="image/png")
-
-
-        with open(f"{hashCode}.cpp","w") as f:
-            f.write('#include "display.h"\n\n\n')
-            f.write('void CodeSnippet::display()\n{\n')
-            f.write(code)
-            f.write('\n}')
-        # command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
-        command=f"g++ main.cpp {hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o {hashCode}"
-        result=run(command,capture_output=True,text=True)
-
-        if(result.returncode==0):
-            result=run(f"{hashCode} {hashCode}",timeout=5)
-            if result.returncode==0:
-                codes[hashCode]=True
-                return send_file(f"media/{hashCode}.png",mimetype="image/png")
-            else:
-                return make_response("Server error",500)
         else:
-            errorMessage=result.stderr
-            if errorMessage.split("\n")[0].find("CodeSnippet::display()")!=-1:
-                errorMessage=errorMessage[errorMessage.find("\n")+1:]
-            errorMessage=errorMessage.replace(f"{hashCode}.cpp","display")
+            return make_response("Server error",500)
+    else:
+        errorMessage=result.stderr
+        if errorMessage.split("\n")[0].find("CodeSnippet::display()")!=-1:
+            errorMessage=errorMessage[errorMessage.find("\n")+1:]
+        errorMessage=errorMessage.replace(f"{hashCode}.cpp","display")
 
-            response=make_response(errorMessage)
-            response.status_code=400
-            response.content_type="text/plain"
-        
-        return response
-    except:
-        return make_response("Server error",500)
-    finally:
-        if hashCode:
-            try:
-                os.remove(f"{hashCode}.cpp")
-            except:
-                pass
-            try:
-                os.remove(f"{hashCode}.out")
-            except:
-                pass
+        response=make_response(errorMessage)
+        response.status_code=400
+        response.content_type="text/plain"
+    
+    return response
+    # except:
+    #     return make_response("Server error",500)
+    # finally:
+    if hashCode:
+        try:
+            os.remove(f"{hashCode}.cpp")
+        except:
+            pass
+        try:
+            os.remove(f"{hashCode}.out")
+        except:
+            pass
 
 @app.get("/")
 def index():
