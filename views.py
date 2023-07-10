@@ -46,11 +46,15 @@ def get_data():
         f.write(code)
         f.write('\n}')
     # command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
-    command=f"g++ /app/main.cpp /app/{hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o /app/{hashCode}"
+    command=f"g++ main.cpp {hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o {hashCode}"
+    command=command.split()
     result=run(command,capture_output=True,text=True)
 
     if(result.returncode==0):
-        result=run(f"/app/{hashCode} {hashCode}",timeout=5)
+        # command=f"./{hashCode} {hashCode}"
+        command=f"xvfb-run ./{hashCode} {hashCode}"
+        command=command.split()
+        result=run(command,timeout=5)
         if result.returncode==0:
             codes[hashCode]=True
             return send_file(f"media/{hashCode}.png",mimetype="image/png")
