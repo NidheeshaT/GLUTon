@@ -8,5 +8,5 @@ freeglut.dll
 FreeImage.dll
 *.exe
 .vscode/
-/*.png
+output.png
 media/*

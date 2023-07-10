@@ -3,6 +3,7 @@
 #include <FreeImage.h>
 #include "display.h"
 
+std::string filename; 
 void saveTextureToFile(GLuint textureID, int width, int height, const std::string& filename)
 {
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -37,7 +38,7 @@ void display()
     glBindTexture(GL_TEXTURE_2D, textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, windowWidth, windowHeight);
-    saveTextureToFile(textureID, windowWidth, windowHeight, "output.png");
+    saveTextureToFile(textureID, windowWidth, windowHeight, "media/"+ filename+".png");
 
     glDeleteTextures(1, &textureID);
 
@@ -46,6 +47,12 @@ void display()
 int main(int argc, char** argv)
 {
     // Initialize GLUT
+    if(argc<1){
+        std::cout<<"Please enter the file name"<<std::endl;
+        return 0;
+    }
+    filename=argv[1];
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
     glutInitWindowSize(800, 600);

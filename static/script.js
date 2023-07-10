@@ -51,7 +51,6 @@ const setup = () => {
     monaco.languages.registerCompletionItemProvider("cpp", {
         provideCompletionItems: function (model, position) {
             const word = model.getWordUntilPosition(position);
-            console.log(word, position);
             let arr = glutKeywords.map((element) => {
                 return {
                     label: element,
@@ -121,12 +120,29 @@ const setup = () => {
     window.addEventListener("resize", resize);
     tail.onDidContentSizeChange(resize)
 
+    function hashString(string) {
+        let hash = 0;
+      
+        if (string.length === 0) {
+          return hash.toString();
+        }
+      
+        for (let i = 0; i < string.length; i++) {
+          const charCode = string.charCodeAt(i);
+          hash = (hash << 5) - hash + charCode;
+          hash &= hash;
+        }
+        if(hash<0)
+            hash*=-1;
+        return hash.toString();
+      }
 
-    document.querySelector("#run").addEventListener("click", (e) => {
+    const sendCode=(e) => {
         location.hash="#display"
+        let hash=hashString(editor.getValue())
         fetch("/", {
             method: "POST",
-            body: JSON.stringify({ code: editor.getValue() }),
+            body:JSON.stringify({code:editor.getValue(),hash:hash}),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -138,18 +154,23 @@ const setup = () => {
                 errors=errors.replace(/\n/g,"<br>")
                 problemTab.innerHTML=errors
                 location.hash="#problems"
-            }
-            else if(response.status==500){
 
             }
-            else if(response.status==200){
+            else if(response.status===500){
+                console.log(await response.text())
+            }
+            else if(response.status===200){
                 const imageUrl = URL.createObjectURL(await response.blob());
                 const img=document.createElement("img")
                 img.src=imageUrl
                 document.getElementById("display-tab").appendChild(img)
+                document.getElementById("problems-tab").textContent="No problems have been detected"
+                hash=""
             }
         });
-    });
+    }
+
+    document.querySelector("#run").addEventListener("click", sendCode);
 };
 
 require.config({
@@ -192,7 +213,6 @@ function switchTab(tb){
 
 const checkHash=()=> {
     try{
-        console.log(location.hash)
         if(location.hash==""){
             panel.style.display="none"
         }
@@ -204,7 +224,6 @@ const checkHash=()=> {
             switchTab(tb)
     }
     catch{
-        console.log("wrong id")
         location.hash=""
     }
 }
