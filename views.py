@@ -45,8 +45,8 @@ def get_data():
             f.write('void CodeSnippet::display()\n{\n')
             f.write(code)
             f.write('\n}')
-        command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
-        # command="g++ *.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o main"
+        # command=f"g++ -I./include -L./lib main.cpp {hashCode}.cpp -lfreeglut -lglu32 -lopengl32 -lFreeImage -o {hashCode}"
+        command=f"g++ main.cpp {hashCode}.cpp -lglut -lGL -lGLU -lfreeimage -lstdc++ -o {hashCode}"
         result=run(command,capture_output=True,text=True)
 
         if(result.returncode==0):
@@ -76,7 +76,7 @@ def get_data():
             except:
                 pass
             try:
-                os.remove(f"{hashCode}.exe")
+                os.remove(f"{hashCode}.out")
             except:
                 pass
 
