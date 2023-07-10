@@ -11,6 +11,9 @@ app.debug=(not eval(os.getenv("PRODUCTION",False)))
 codes={}
 running =False
 
+if not os.path.exists("media"):
+    os.mkdir("media")
+
 def clean_code(code:str):
     lst=code.split("\n")
 
